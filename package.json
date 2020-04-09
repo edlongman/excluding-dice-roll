@@ -1,6 +1,6 @@
 {
   "name": "excluding-dice-roll",
-  "version": "0.0.1",
+  "version": "v0.1",
   "description": "",
   "main": "server.js",
   "scripts": {
