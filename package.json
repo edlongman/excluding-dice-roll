@@ -1,7 +1,7 @@
 {
   "name": "excluding-dice-roll",
-  "version": "v0.1",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Rolls a dice but show the chameleon to one person.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
