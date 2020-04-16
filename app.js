@@ -41,7 +41,7 @@ var roll_num = 0;
 var room_size = 0;
 var slots = [];
 
-var app = express.Router();
+var app = express();
 function sendOkStyled(res, content){
   const header = `
   <meta name="viewport" content="width=device-width, initial-scale=1"><style>
@@ -51,8 +51,8 @@ function sendOkStyled(res, content){
   const footer = `</h2>`
   res.status(200).send(header+content+footer);
 }
-app.get('/', async function(req, res){
-  const link = "<a href='/join'>Join</a>";
+app.get('/', async (req, res) => {
+  const link = `<a href='${req.baseUrl}/join'>Join</a>`;
   sendOkStyled(res,"Welcome to the chameleon dice roll, join the current room: " + link);
 });
 app.get('/join', async function(req, res){
@@ -60,12 +60,12 @@ app.get('/join', async function(req, res){
   for(var i=0;i<slots.length;i++){
     if(slots[i].user == 0){
       slots[i].user = makeid(hash_len);
-      res.redirect("/room/"+roll_num+"/"+slots[i].user);
+      res.redirect(`${req.baseUrl}/room/`+roll_num+"/"+slots[i].user);
       return;
     }
   }
   if(user_hash ==0){
-    const link = "<a href='/join'>Try Again</a>";
+    const link = `<a href='${req.baseUrl}/join'>Try Again</a>`;
     sendOkStyled(res,"Unable to join, room busy. " + link);
   }
 });
@@ -79,17 +79,17 @@ app.get('/room/:roll/:hash', async function(req, res){
   for(var i=0;i<slots.length;i++){
     if(slots[i].user == this_hash){
       slots[i].reset = false;
-      const next_link = "<a href='/room/"+ next_roll + "/" + slots[i].next +"'>Next</a>";
+      const next_link = `<a href='${req.baseUrl}/room/`+ next_roll + "/" + slots[i].next +"'>Next</a>";
       sendOkStyled(res,"Roll "+ roll_num +" is " + (slots[i].value||"You are the Chameleon") + ". "+next_link);
       return;
     }
     else if(slots[i].next == this_hash){
-      const next_link = "<a href='/room/"+ next_roll + "/" + slots[i].next +"'>Next</a>";
+      const next_link = `<a href='${req.baseUrl}/room/`+ next_roll + "/" + slots[i].next +"'>Next</a>";
       sendOkStyled(res,"Next Roll not ready! Roll "+ roll_num +" is " + (slots[i].value||"You are the Chameleon") + ". "+next_link);
       return;
     }
   }
-  sendOkStyled(res,"You have been kicked. Go back to <a href='/'>Home</a>");
+  sendOkStyled(res,`You have been kicked. Go back to <a href='${req.baseUrl}/'>Home</a>`);
 
 });
 app.get('/reroll/:size/:exclude', async function(req, res){
@@ -106,7 +106,8 @@ app.get('/reroll/:size/:exclude', async function(req, res){
       value:(item<excl_size)?0:roll,
     }
   });
-  sendOkStyled(res,'Rolled for '+game_size +' people with '+excl_size+' chameleons.');
+  const link = `<a href='${req.baseUrl}/reroll/${game_size}/${excl_size}'>Reroll</a>`;
+  sendOkStyled(res,'Rolled for '+game_size +' people with '+excl_size+' chameleons. '+link);
 })
 
 module.exports = app; //Perhaps not the best way to do this

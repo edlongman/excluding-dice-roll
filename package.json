@@ -1,6 +1,6 @@
 {
   "name": "excluding-dice-roll",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Rolls a dice but show the chameleon to one person.",
   "main": "app.js",
   "scripts": {
